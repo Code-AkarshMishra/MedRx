@@ -1,0 +1,26 @@
+# Secrets
+.env
+.env.*
+backend/.env
+frontend/.env
+
+# Dependencies
+node_modules/
+
+# Build
+dist/
+build/
+.next/
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
