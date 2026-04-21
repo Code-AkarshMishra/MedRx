@@ -11,7 +11,17 @@ const historyRoutes = require('./src/routes/historyRoutes');
 const app = express();
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      // Allow LAN testing when Vite is opened via Network URL
+      "http://192.168.0.107:5173",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Database Connection

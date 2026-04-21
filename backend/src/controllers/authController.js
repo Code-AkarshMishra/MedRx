@@ -51,16 +51,85 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require("crypto");
+
+function computeAge(dob) {
+  const d = new Date(dob);
+  if (Number.isNaN(d.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - d.getFullYear();
+  const m = today.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < d.getDate())) age -= 1;
+  return age;
+}
+
+async function generateUniquePatientId() {
+  const year = new Date().getFullYear();
+  for (let i = 0; i < 8; i++) {
+    const rand = crypto.randomBytes(4).toString("hex").toUpperCase();
+    const patientId = `MRX-${year}-${rand}`;
+    const exists = await User.exists({ patientId });
+    if (!exists) return patientId;
+  }
+  // Fallback (extremely unlikely to collide)
+  return `MRX-${year}-${crypto.randomBytes(8).toString("hex").toUpperCase()}`;
+}
 
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, contactNo, email, password, dob, gender } = req.body;
+    if (!name || !contactNo || !email || !password || !dob || !gender) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const age = computeAge(dob);
+    if (age === null || age < 0 || age > 120) {
+      return res.status(400).json({ message: "Invalid date of birth" });
+    }
+
+    const normalizedGender =
+      gender === "Male" || gender === "Female" || gender === "Other" ? gender : null;
+    if (!normalizedGender) {
+      return res.status(400).json({ message: "Invalid gender" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
+    const patientId = await generateUniquePatientId();
+    const user = await User.create({
+      patientId,
+      name,
+      contactNo,
+      email,
+      password: hashedPassword,
+      dob,
+      gender: normalizedGender,
+    });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.status(201).json({ token, user: { name: user.name, email: user.email } });
+    res.status(201).json({
+      token,
+      user: {
+        id: user._id,
+        patientId: user.patientId,
+        name: user.name,
+        contactNo: user.contactNo,
+        email: user.email,
+        dob: user.dob,
+        age: user.age,
+        gender: user.gender,
+      },
+    });
   } catch (err) {
-    res.status(400).json({ message: "Email already exists or invalid data" });
+    if (err?.code === 11000) {
+      const key = Object.keys(err.keyPattern || err.keyValue || {})[0] || "field";
+      const msg =
+        key === "email"
+          ? "Email already exists"
+          : key === "patientId"
+            ? "Please retry (patient id collision)"
+            : "Duplicate value";
+      return res.status(409).json({ message: msg });
+    }
+    res.status(400).json({ message: err?.message || "Invalid data" });
   }
 };
 
@@ -72,7 +141,19 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.status(200).json({ token, user: { name: user.name, email: user.email } });
+    res.status(200).json({
+      token,
+      user: {
+        id: user._id,
+        patientId: user.patientId,
+        name: user.name,
+        contactNo: user.contactNo,
+        email: user.email,
+        dob: user.dob,
+        age: user.age,
+        gender: user.gender,
+      },
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

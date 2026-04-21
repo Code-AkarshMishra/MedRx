@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Matches backend port
+  // Use Vite dev proxy (vite.config.js) and avoid CORS issues.
+  // In production, serve frontend + backend under same domain or set VITE_API_BASE_URL.
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
 });
 
 export const setAuthToken = (token) => {

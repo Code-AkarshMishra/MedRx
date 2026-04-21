@@ -3,7 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { api, setAuthToken } from "../services/api";
 import { STORAGE_KEYS, saveJSON } from "../utils/storage";
 
-const defaultForm = { name: "", email: "", password: "" };
+const defaultForm = {
+  name: "",
+  contactNo: "",
+  dob: "",
+  gender: "Male",
+  email: "",
+  password: "",
+};
 
 function AuthPanel({ onAuthSuccess }) {
   const [mode, setMode] = useState("login");
@@ -17,7 +24,17 @@ function AuthPanel({ onAuthSuccess }) {
     setLoading(true);
     try {
       const endpoint = mode === "login" ? "/auth/login" : "/auth/signup";
-      const payload = mode === "login" ? { email: form.email, password: form.password } : form;
+      const payload =
+        mode === "login"
+          ? { email: form.email, password: form.password }
+          : {
+              name: form.name,
+              contactNo: form.contactNo,
+              dob: form.dob,
+              gender: form.gender,
+              email: form.email,
+              password: form.password,
+            };
       const { data } = await api.post(endpoint, payload);
       saveJSON(STORAGE_KEYS.token, data.token);
       saveJSON(STORAGE_KEYS.user, data.user);
@@ -61,14 +78,56 @@ function AuthPanel({ onAuthSuccess }) {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
             >
-              <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Full Name</label>
-              <input
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition"
-                placeholder="Your Name"
-                value={form.name}
-                onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-                required
-              />
+              <div className="space-y-4">
+                <div>
+                  <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Full Name</label>
+                  <input
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition"
+                    placeholder="Your Name"
+                    value={form.name}
+                    onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Contact No</label>
+                  <input
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition"
+                    placeholder="10-digit mobile number"
+                    value={form.contactNo}
+                    onChange={(e) => setForm((p) => ({ ...p, contactNo: e.target.value }))}
+                    required
+                    inputMode="tel"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Date of Birth</label>
+                    <input
+                      type="date"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition"
+                      value={form.dob}
+                      onChange={(e) => setForm((p) => ({ ...p, dob: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Gender</label>
+                    <select
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition"
+                      value={form.gender}
+                      onChange={(e) => setForm((p) => ({ ...p, gender: e.target.value }))}
+                      required
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
