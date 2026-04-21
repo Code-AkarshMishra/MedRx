@@ -16,6 +16,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://127.0.0.1:5173",
+      "https://medrx-beta.vercel.app",
       // Allow LAN testing when Vite is opened via Network URL
       "http://192.168.0.107:5173",
     ],
