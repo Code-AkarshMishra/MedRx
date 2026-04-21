@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://medrx-l732.onrender.com/api/:path*"
+        }
+    ]
+}
