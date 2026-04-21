@@ -16,4 +16,4 @@ export default function Logo({ className = "" }) {
             />
         </motion.div>
     );
-}
+}   

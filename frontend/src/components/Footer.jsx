@@ -12,14 +12,14 @@ export default function Footer() {
                         </p>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">Platform</h4>
                         <ul className="mt-4 space-y-2 text-sm text-slate-600">
                             <li><a href="#features" className="hover:text-blue-600 transition">Features</a></li>
                             <li><a href="/portal" className="hover:text-blue-600 transition">AI Analyzer Workspace</a></li>
                             <li><a href="#" className="hover:text-blue-600 transition">Sample Reports</a></li>
                         </ul>
-                    </div>
+                    </div> */}
 
                     <div>
                         <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">Company</h4>
@@ -27,16 +27,30 @@ export default function Footer() {
                             <li><a href="#" className="hover:text-blue-600 transition">About Us</a></li>
                             <li><a href="#contact" className="hover:text-blue-600 transition">Contact Support</a></li>
                             <li><a href="#" className="hover:text-blue-600 transition">Privacy Policy</a></li>
+                            <li><a href="#" className="hover:text-blue-600 transition"></a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">Team</h4>
+                        <ul className="mt-4 space-y-2 text-sm text-slate-600">
+                            <li><a href="#" className="hover:text-blue-600 transition">Akarsh Mishra</a></li>
+                            <li><a href="#contact" className="hover:text-blue-600 transition">Rohanpreet Arora</a></li>
+                            <li><a href="#" className="hover:text-blue-600 transition">Saksham Sahu</a></li>
+                            <li><a href="#" className="hover:text-blue-600 transition"></a></li>
                         </ul>
                     </div>
 
                     <div id="contact">
                         <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">Connect</h4>
-                        <p className="mt-4 text-sm text-slate-600">support@medrx.ai</p>
-                        <div className="mt-4 flex gap-4">
+                        <p className="mt-4 text-sm text-slate-600">support.medrx@gmail.com</p>
+                        <a href="#contact" className="hover:text-blue-600 transition">akarsh38560.srmu@gmail.com</a><br></br>
+                        <a href="#" className="hover:text-blue-600 transition">rohanpreet37709.srmu@gmail.com</a><br></br>
+                        <a href="#contact" className="hover:text-blue-600 transition">saksham35923.srmu@gmail.com</a>
+
+                        {/* <div className="mt-4 flex gap-4">
                             <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition">in</div>
-                            <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition">tw</div>
-                        </div>
+                            <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition">M</div>
+                        </div> */}
                     </div>
                 </div>
 
