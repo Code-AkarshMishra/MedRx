@@ -1,20 +1,32 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-// Ensure you import your API and storage utilities here as they were in your original file
+import { api, setAuthToken } from "../services/api";
+import { STORAGE_KEYS, saveJSON } from "../utils/storage";
 
 function UploadPanel({ token, onAnalyzed }) {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Example placeholder for your actual upload logic
   const handleUpload = async (selectedFile) => {
-    // Replace with your actual API logic
+    setError("");
+    setFile(selectedFile);
+    const formData = new FormData();
+    formData.append("report", selectedFile);
+
+    setAuthToken(token || null);
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const { data } = await api.post("/analyze", formData);
+      saveJSON(STORAGE_KEYS.result, data);
       onAnalyzed();
-    }, 2000);
+    } catch (err) {
+      const message = err?.response?.data?.message || "Upload failed. Please try again.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,7 +45,6 @@ function UploadPanel({ token, onAnalyzed }) {
           setIsDragging(false);
           const droppedFile = e.dataTransfer.files[0];
           if (droppedFile) {
-            setFile(droppedFile);
             handleUpload(droppedFile);
           }
         }}
@@ -59,7 +70,6 @@ function UploadPanel({ token, onAnalyzed }) {
             accept=".jpg,.jpeg,.png,.pdf"
             onChange={(e) => {
               if (e.target.files[0]) {
-                setFile(e.target.files[0]);
                 handleUpload(e.target.files[0]);
               }
             }}
@@ -74,6 +84,14 @@ function UploadPanel({ token, onAnalyzed }) {
           </svg>
           Analyzing via AI...
         </div>
+      )}
+
+      {file && !loading && (
+        <p className="mt-4 text-xs text-slate-500">Selected: {file.name}</p>
+      )}
+
+      {error && (
+        <p className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</p>
       )}
     </div>
   );
