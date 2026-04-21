@@ -3,6 +3,8 @@
 body {
   margin: 0;
   font-family: Inter, "Segoe UI", system-ui, sans-serif;
-  background: linear-gradient(180deg, #f6f8ff 0%, #eef3ff 100%);
-  color: #10243e;
+  @apply text-slate-800 antialiased bg-slate-50;
+  /* Subtle medical grid background */
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 40px 40px;
 }

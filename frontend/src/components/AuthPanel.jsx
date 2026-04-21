@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { api, setAuthToken } from "../services/api";
 import { STORAGE_KEYS, saveJSON } from "../utils/storage";
 
@@ -31,24 +32,58 @@ function AuthPanel({ onAuthSuccess }) {
   };
 
   return (
-    <div className="rounded-2xl bg-white/90 p-6 shadow-lg backdrop-blur">
-      <h2 className="text-2xl font-semibold text-slate-800">Account Access</h2>
-      <p className="mt-1 text-sm text-slate-500">Login or create an account to save report history.</p>
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 className="text-xl font-bold text-slate-800">Account Access</h2>
+      <p className="mt-1 mb-6 text-sm text-slate-500">Log in to save your report history securely.</p>
 
-      <div className="mt-4 flex gap-2">
-        <button className={`rounded-lg px-3 py-2 text-sm ${mode === "login" ? "bg-blue-600 text-white" : "bg-slate-100"}`} onClick={() => setMode("login")}>Login</button>
-        <button className={`rounded-lg px-3 py-2 text-sm ${mode === "signup" ? "bg-blue-600 text-white" : "bg-slate-100"}`} onClick={() => setMode("signup")}>Signup</button>
+      {/* Animated Toggle */}
+      <div className="mb-6 flex rounded-xl bg-slate-100 p-1 relative">
+        {["login", "signup"].map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => { setMode(tab); setError(""); }}
+            className={`relative w-1/2 rounded-lg py-2 text-sm font-bold transition-colors ${mode === tab ? "text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+          >
+            {mode === tab && (
+              <motion.div layoutId="auth-pill" className="absolute inset-0 rounded-lg bg-white shadow-sm" transition={{ type: "spring", stiffness: 300, damping: 20 }} />
+            )}
+            <span className="relative z-10 capitalize">{tab}</span>
+          </button>
+        ))}
       </div>
 
-      <form onSubmit={submit} className="mt-4 space-y-3">
-        {mode === "signup" && (
-          <input className="w-full rounded-lg border p-2.5" placeholder="Full name" value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} required />
+      <form onSubmit={submit} className="space-y-4">
+        <AnimatePresence mode="popLayout">
+          {mode === "signup" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Full Name</label>
+              <input className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition" placeholder="John Doe" value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} required />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div>
+          <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Email</label>
+          <input type="email" className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition" placeholder="you@example.com" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} required />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-bold text-slate-600 uppercase tracking-wide">Password</label>
+          <input type="password" className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition" placeholder="••••••••" value={form.password} onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))} required minLength={6} />
+        </div>
+
+        {error && (
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-600 border border-red-100">
+            {error}
+          </motion.p>
         )}
-        <input type="email" className="w-full rounded-lg border p-2.5" placeholder="Email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} required />
-        <input type="password" className="w-full rounded-lg border p-2.5" placeholder="Password" value={form.password} onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))} required minLength={6} />
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button disabled={loading} className="w-full rounded-lg bg-slate-900 py-2.5 text-white disabled:opacity-60">
-          {loading ? "Please wait..." : mode === "login" ? "Login" : "Create Account"}
+
+        <button disabled={loading} className="w-full rounded-xl bg-blue-600 py-3 mt-2 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700 disabled:opacity-60 disabled:hover:bg-blue-600">
+          {loading ? "Processing..." : mode === "login" ? "Sign In" : "Create Account"}
         </button>
       </form>
     </div>
