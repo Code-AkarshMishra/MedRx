@@ -33,18 +33,18 @@ function HomePage() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative z-10 mx-auto max-w-4xl">
           <h1 className="text-5xl font-black tracking-tight text-slate-900 md:text-7xl leading-tight">
-            Complex Medical Reports?<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-teal-500">Simplified Instantly.</span>
+            Making Medical Reports<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-teal-500">Human Readable.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-500 md:text-xl leading-relaxed">
             Upload your clinical documents and let our advanced AI translate complicated medical jargon into clear, actionable plain English.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate("/portal")} className="rounded-full bg-blue-600 px-8 py-4 font-bold text-white shadow-xl shadow-blue-600/20 transition hover:bg-blue-700">
-              Launch Workspace
+              Start
             </motion.button>
             <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#how-it-works" className="rounded-full bg-white px-8 py-4 font-bold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 inline-flex items-center justify-center">
-              See How It Works
+              See wroking...
             </motion.a>
           </div>
         </motion.div>
@@ -61,7 +61,7 @@ function HomePage() {
             <div className="w-12 h-12 bg-blue-600 rounded-xl mb-6 flex items-center justify-center shadow-sm">
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
             </div>
-            <h3 className="text-2xl font-bold text-slate-900">Deep AI Analysis</h3>
+            <h3 className="text-2xl font-bold text-slate-900">AI Analysis</h3>
             <p className="mt-2 text-slate-600 leading-relaxed">Our proprietary engine scans every diagnostic term, medication, and value, cross-referencing vast medical databases to provide accurate summaries.</p>
           </div>
           <div className="rounded-[2rem] bg-teal-50 p-10 border border-teal-100 transition hover:shadow-md">
