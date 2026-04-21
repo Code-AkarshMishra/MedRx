@@ -1,28 +1,14 @@
-const mongoose = require("mongoose");
-
-const parameterSchema = new mongoose.Schema(
-  {
-    key: String,
-    value: Number,
-    unit: String,
+const mongoose = require('mongoose');
+const reportSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  originalFileName: String,
+  extractedText: String,
+  simpleExplanation: String,
+  parameters: [{
+    name: String,
+    value: String,
     status: String,
-    range: String,
-    explanation: String,
-    explanationHinglish: String,
-  },
-  { _id: false }
-);
-
-const reportSchema = new mongoose.Schema(
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
-    originalFileName: { type: String, required: true },
-    extractedText: { type: String, required: true },
-    parameters: [parameterSchema],
-    finalExplanation: { type: String, required: true },
-    finalExplanationHinglish: { type: String, required: true },
-  },
-  { timestamps: true }
-);
-
-module.exports = mongoose.model("Report", reportSchema);
+    meaning: String
+  }]
+}, { timestamps: true });
+module.exports = mongoose.model('Report', reportSchema);

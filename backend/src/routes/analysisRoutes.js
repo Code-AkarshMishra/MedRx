@@ -1,10 +1,10 @@
-const express = require("express");
-const upload = require("../middleware/uploadMiddleware");
-const authMiddleware = require("../middleware/authMiddleware");
-const { analyzeReport } = require("../controllers/analysisController");
-
+const express = require('express');
 const router = express.Router();
+const upload = require('../middleware/uploadMiddleware');
+const { verifyToken } = require('../middleware/authMiddleware');
+const { analyzeReport, chatBot } = require('../controllers/analysisController');
 
-router.post("/", authMiddleware, upload.single("report"), analyzeReport);
-
+// Expects field name 'report' from frontend
+router.post('/analyze', verifyToken, upload.single('report'), analyzeReport);
+router.post('/chat', chatBot);
 module.exports = router;

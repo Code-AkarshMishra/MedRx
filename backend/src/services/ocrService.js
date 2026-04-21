@@ -1,18 +1,14 @@
-const fs = require("fs");
-const Tesseract = require("tesseract.js");
-const { PDFParse } = require("pdf-parse");
+const Tesseract = require('tesseract.js');
+const fs = require('fs');
 
-const extractText = async (file) => {
-  if (file.mimetype === "application/pdf") {
-    const dataBuffer = fs.readFileSync(file.path);
-    const parser = new PDFParse({ data: dataBuffer });
-    const parsed = await parser.getText();
-    await parser.destroy();
-    return parsed?.text || "";
+exports.extractText = async (filePath) => {
+  try {
+    const { data: { text } } = await Tesseract.recognize(filePath, 'eng');
+    // Delete file after extraction to save space
+    fs.unlinkSync(filePath); 
+    return text;
+  } catch (error) {
+    console.error("OCR Error:", error);
+    throw error;
   }
-
-  const result = await Tesseract.recognize(file.path, "eng");
-  return result.data.text || "";
 };
-
-module.exports = { extractText };

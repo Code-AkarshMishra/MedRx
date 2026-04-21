@@ -1,15 +1,10 @@
-const Report = require("../models/Report");
+const Report = require('../models/Report');
 
-const getHistory = async (req, res) => {
+exports.getHistory = async (req, res) => {
   try {
-    if (!req.user?.id) return res.json([]);
-    const reports = await Report.find({ user: req.user.id })
-      .sort({ createdAt: -1 })
-      .select("originalFileName parameters finalExplanation createdAt");
-    return res.json(reports);
+    const history = await Report.find({ userId: req.user.id }).sort({ createdAt: -1 });
+    res.status(200).json(history);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Failed to fetch history" });
   }
 };
-
-module.exports = { getHistory };

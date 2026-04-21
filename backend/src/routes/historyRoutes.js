@@ -1,9 +1,7 @@
-const express = require("express");
-const authMiddleware = require("../middleware/authMiddleware");
-const { getHistory } = require("../controllers/historyController");
-
+const express = require('express');
 const router = express.Router();
+const { verifyToken } = require('../middleware/authMiddleware');
+const { getHistory } = require('../controllers/historyController');
 
-router.get("/", authMiddleware, getHistory);
-
+router.get('/', verifyToken, getHistory);
 module.exports = router;
