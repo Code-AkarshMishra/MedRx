@@ -66,6 +66,7 @@ Return STRICT JSON with this shape:
   }
 }
 
+
 Rules:
 - Confidence must be an integer 0-100.
 - If symptoms are not present in the report text, infer NONE and return empty arrays.
