@@ -12,8 +12,6 @@ function computeAge(dob) {
   return age;
 }
 
-
-
 function makePatientId() {
   const year = new Date().getFullYear();
   const rand = crypto.randomBytes(4).toString("hex").toUpperCase(); // 8 chars
