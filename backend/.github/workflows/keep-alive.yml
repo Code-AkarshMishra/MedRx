@@ -1,0 +1,26 @@
+name: Keep MongoDB Awake
+
+on:
+  schedule:
+    # Runs automatically every day at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows you to run it manually from the GitHub UI
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          
+      - name: Install Mongoose
+        run: npm install mongoose
+        
+      - name: Run Ping Script
+        env:
+          MONGODB_URI: ${{ secrets.MONGO_URI }} # Make sure to add your URI in GitHub Repository Secrets
+        run: node ping-db.js
